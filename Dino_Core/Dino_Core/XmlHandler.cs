@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml;
-
+using System.Collections.Generic;
 
 namespace Dino_Core
 {
@@ -20,7 +20,7 @@ namespace Dino_Core
         /// </summary>
         /// <param name="_path"></param>
         /// <returns></returns>
-        public static bool AddNodesToFile(string _path, string _rootNodeName, BaseNode[] _nodeList)
+        public static bool AddNodesToFile(string _path, string _rootNodeName, NodeStruct[] _nodeList)
         {
             XmlDocument _xmlDoc = new XmlDocument();
             if (!File.Exists(_path))
@@ -60,13 +60,14 @@ namespace Dino_Core
         /// <param name="_path"></param>
         /// <param name="_rootNodeName"></param>
         /// <returns></returns>
-        public static ArrayList ReadNodesFromFile(string _path, string _rootNodeName)
+        public static NodeStruct ReadNodesFromFile(string _path, string _rootNodeName)
         {
-            ArrayList _resultList = new ArrayList();
+            NodeStruct _result = new NodeStruct();
+            _result.setName(_rootNodeName);
 
             if (!File.Exists(_path))
             {
-                return _resultList;
+                return _result;
             }
 
             XmlDocument _xmlDoc = new XmlDocument();
@@ -75,13 +76,13 @@ namespace Dino_Core
             XmlNodeList _nodeList = _xmlDoc.SelectSingleNode("Data-List/" + _rootNodeName).ChildNodes;
             foreach (XmlNode _node in _nodeList)
             {
-                BaseNode _xmlNode = new BaseNode(_node.Name, _node.InnerText);
-                _resultList.Add(_xmlNode);
+                // 遍历改节点子树
+                _recursionTraverse(_result,_node);
             }
 
-            return _resultList;
+            return _result;
         }
-        public static BaseNode ReadNodeFromFile(string _path, string _rootNodeName)
+        public static NodeStruct ReadNodeFromFile(string _path, string _rootNodeName)
         {
             if (!File.Exists(_path))
             {
@@ -94,9 +95,24 @@ namespace Dino_Core
             XmlNode _node = _xmlDoc.SelectSingleNode("Data-List/" + _rootNodeName);
 
             if (_node != null)
-                return new BaseNode(_node.Name, _node.InnerText);
+                return new NodeStruct(_node.Name, _node.InnerText);
             else
                 return null;
+        }
+
+        private static void _recursionTraverse(NodeStruct _parent, XmlNode _parentNode)
+        {
+            // 先将当前节点加入
+            NodeStruct _current = new NodeStruct(_parentNode.Name, _parentNode.InnerText);
+            _parent.addChild(_current);
+
+            // 遍历当前节点子树
+            XmlNodeList _childList = _parentNode.ChildNodes;
+            foreach (XmlNode _node in _childList)
+            {
+                // 递归
+                _recursionTraverse(_current, _node);
+            }
         }
 
         /// <summary>
@@ -106,11 +122,20 @@ namespace Dino_Core
         /// <param name="_targetNode"></param>
         /// <param name="_name"></param>
         /// <param name="_content"></param>
-        private static void AddChildtoNode(XmlDocument _targetDoc, XmlElement _targetNode, BaseNode _node)
+        private static void AddChildtoNode(XmlDocument _targetDoc, XmlElement _targetNode, NodeStruct _node)
         {
-            XmlElement _element = _targetDoc.CreateElement(_node.Key);
-            _element.InnerText = _node.Value;
+            XmlElement _element = _targetDoc.CreateElement(_node.getName());
+            _element.InnerText = _node.getValue();
             _targetNode.AppendChild(_element);
+
+            if (_node.getChildrenCount() != 0)
+            {
+                List<NodeStruct> _children = _node.getChildren();
+                foreach (NodeStruct _ns in _children)
+                {
+                    AddChildtoNode(_targetDoc, _element, _ns);
+                }
+            }
         }
 
     }

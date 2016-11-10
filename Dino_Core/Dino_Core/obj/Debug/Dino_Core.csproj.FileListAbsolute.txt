@@ -11,3 +11,10 @@ E:\Extends Lib\Dino_Core\Dino_Core\obj\Debug\Dino_Core.dll
 E:\Extends Lib\Dino_Core\Dino_Core\obj\Debug\Dino_Core.pdb
 E:\Extends Lib\Dino_Core\Dino_Core\bin\Debug\Excel.dll
 E:\Extends Lib\Dino_Core\Dino_Core\bin\Debug\ICSharpCode.SharpZipLib.dll
+E:\Extends-Lib\Dino_Core\Dino_Core\bin\Debug\Dino_Core.dll
+E:\Extends-Lib\Dino_Core\Dino_Core\bin\Debug\Dino_Core.pdb
+E:\Extends-Lib\Dino_Core\Dino_Core\bin\Debug\Excel.dll
+E:\Extends-Lib\Dino_Core\Dino_Core\bin\Debug\ICSharpCode.SharpZipLib.dll
+E:\Extends-Lib\Dino_Core\Dino_Core\bin\Debug\UnityEngine.dll
+E:\Extends-Lib\Dino_Core\Dino_Core\obj\Debug\Dino_Core.dll
+E:\Extends-Lib\Dino_Core\Dino_Core\obj\Debug\Dino_Core.pdb
