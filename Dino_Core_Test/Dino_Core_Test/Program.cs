@@ -38,6 +38,8 @@ namespace Dino_Core_Test
 
 
             Dino_Core.NodeStruct _node = Dino_Core.XmlHandler.ReadNodesFromFile("test.xml", "Root");
+
+            System.Console.ReadLine();
         }
     }
 }
